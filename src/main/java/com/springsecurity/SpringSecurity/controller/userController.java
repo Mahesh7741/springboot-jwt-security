@@ -2,6 +2,7 @@ package com.springsecurity.SpringSecurity.controller;
 
 import com.springsecurity.SpringSecurity.dto.RegisterRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class userController {
 
     @RequestMapping("/register")
-    public ResponseEntity<?> userRegister(RegisterRequest request){
-        return ResponseEntity.ok(request.firstname() + " " + request.lastname() + " and email is" + request.email());
+    public ResponseEntity<?> userRegister(@RequestBody RegisterRequest request){
+        return ResponseEntity.ok(request.firstname() + " " + request.lastname() + " and email is " + request.email());
     }
 }
