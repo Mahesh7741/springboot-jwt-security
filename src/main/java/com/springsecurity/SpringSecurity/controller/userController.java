@@ -1,5 +1,6 @@
 package com.springsecurity.SpringSecurity.controller;
 
+import com.springsecurity.SpringSecurity.dto.LoginRequest;
 import com.springsecurity.SpringSecurity.dto.RegisterRequest;
 import com.springsecurity.SpringSecurity.entity.User;
 import com.springsecurity.SpringSecurity.enums.Role;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,5 +42,12 @@ public class userController {
         return ResponseEntity.ok("user is register !!!");
     }
 
-
+    @PostMapping("login")
+    public ResponseEntity<?> userLogin(@RequestBody LoginRequest request){
+        User user=userRepository.findByUsername(request.username()).orElseThrow(()->new RuntimeException("user is not found!!"));
+        if(!passwordEncoder.matches(request.password(),user.getPassword())){
+            return ResponseEntity.badRequest().body("Invalid username or password !!!");
+        }
+        return ResponseEntity.ok("Login");
+    }
 }
