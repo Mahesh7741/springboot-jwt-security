@@ -7,6 +7,7 @@ import com.springsecurity.SpringSecurity.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ public class userController {
     @Autowired
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
     @RequestMapping("/register")
     public ResponseEntity<?> userRegister(@RequestBody RegisterRequest request){
         if(userRepository.findByUsername(request.username()).isPresent() || userRepository.findByEmail(request.email()).isPresent()){
@@ -31,10 +33,12 @@ public class userController {
         user.setFirstname(request.firstname());
         user.setLastname(request.lastname());
         user.setEmail(request.email());
-        user.setPassword(request.password());
+        user.setPassword(passwordEncoder.encode(request.password()));
         user.setRole(Role.USER);
 
         userRepository.save(user);
         return ResponseEntity.ok("user is register !!!");
     }
+
+
 }
