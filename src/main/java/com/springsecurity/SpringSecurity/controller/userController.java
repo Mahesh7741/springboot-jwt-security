@@ -5,6 +5,7 @@ import com.springsecurity.SpringSecurity.dto.RegisterRequest;
 import com.springsecurity.SpringSecurity.entity.User;
 import com.springsecurity.SpringSecurity.enums.Role;
 import com.springsecurity.SpringSecurity.repository.UserRepository;
+import com.springsecurity.SpringSecurity.security.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ public class userController {
 
     @Autowired
     private final UserRepository userRepository;
+
+    @Autowired
+    private final JwtService jwtService;
 
     private final PasswordEncoder passwordEncoder;
     @RequestMapping("/register")
@@ -48,6 +52,9 @@ public class userController {
         if(!passwordEncoder.matches(request.password(),user.getPassword())){
             return ResponseEntity.badRequest().body("Invalid username or password !!!");
         }
-        return ResponseEntity.ok("Login");
+        String token= jwtService.generateToken(request.username());
+        return ResponseEntity.ok(token);
     }
+
+
 }
