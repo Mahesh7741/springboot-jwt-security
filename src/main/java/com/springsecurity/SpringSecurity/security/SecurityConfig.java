@@ -1,5 +1,6 @@
 package com.springsecurity.SpringSecurity.security;
 
+import com.springsecurity.SpringSecurity.enums.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,8 +31,8 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/admin/**").hasRole(String.valueOf(Role.ADMIN))
+                        .requestMatchers("/user/**").hasAnyRole(String.valueOf(Role.USER),String.valueOf(Role.ADMIN))
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(daoAuthProvider())
