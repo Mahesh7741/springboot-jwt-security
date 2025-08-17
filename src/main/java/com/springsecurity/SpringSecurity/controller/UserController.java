@@ -11,11 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 @RestController
 @RequestMapping("user")
 @AllArgsConstructor
-public class userController {
+public class UserController {
 
     @Autowired
     private final UserRepository userRepository;
@@ -49,14 +50,25 @@ public class userController {
         if(!passwordEncoder.matches(request.password(),user.getPassword())){
             return ResponseEntity.badRequest().body("Invalid username or password !!!");
         }
-        String token= jwtService.generateToken(request.username());
-        return ResponseEntity.ok(token);
+        String token= jwtService.generateToken(request.username(), user.getRole().toString());
+        return ResponseEntity.ok(Map.of("token", token));
     }
 
     @GetMapping("/profile")
     public ResponseEntity<?> getUsername(@RequestHeader("Authorization") String authHeader){
-        String token = authHeader.substring(7); // remove "Bearer "
+        String token = authHeader.substring(7);
         String username = jwtService.extractUsername(token);
-        return ResponseEntity.ok("Profile of " + username);
+        return ResponseEntity.ok("Profile of " + username + " - Token is working!");
+    }
+
+    @GetMapping("/test-token")
+    public ResponseEntity<?> testToken(@RequestHeader("Authorization") String authHeader){
+        try {
+            String token = authHeader.substring(7);
+            String username = jwtService.extractUsername(token);
+            return ResponseEntity.ok("Token is valid for user: " + username);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Token validation failed: " + e.getMessage());
+        }
     }
 }
