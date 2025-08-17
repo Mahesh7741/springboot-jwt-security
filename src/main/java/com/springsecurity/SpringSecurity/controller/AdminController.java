@@ -1,12 +1,11 @@
 package com.springsecurity.SpringSecurity.controller;
 
+import com.springsecurity.SpringSecurity.dto.AssignProfileRequest;
 import com.springsecurity.SpringSecurity.dto.GetAllProfile;
 import com.springsecurity.SpringSecurity.service.AdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +30,15 @@ public class AdminController {
     @GetMapping("/get-all-admin-profile")
     public ResponseEntity<List<GetAllProfile>> getAllAdminProfile(){
         return adminService.getAllAdmin();
+    }
+
+    @PatchMapping("/assign-admin-profile")
+    public ResponseEntity<?> assignAdminProfile(@RequestBody AssignProfileRequest request){
+        return adminService.assignAdminProfile(request);
+    }
+
+    @PatchMapping("/assign-user-profile")
+    public ResponseEntity<?> assignUserProfile(@RequestBody AssignProfileRequest request){
+        return adminService.assignUserProfile(request);
     }
 }
