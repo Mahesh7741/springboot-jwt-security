@@ -31,8 +31,8 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/admin/test").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/admin/test").hasRole(String.valueOf(Role.ADMIN))
+                        .requestMatchers("/user/**").hasAnyRole(String.valueOf(Role.USER),String.valueOf(Role.ADMIN))
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(daoAuthProvider())

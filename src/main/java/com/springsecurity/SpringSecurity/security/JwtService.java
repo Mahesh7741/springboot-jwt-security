@@ -1,5 +1,6 @@
 package com.springsecurity.SpringSecurity.security;
 
+import com.springsecurity.SpringSecurity.enums.Role;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -30,7 +31,7 @@ public class JwtService {
     }
 
     public String generateToken(String username){
-        return generateToken(username, "USER");
+        return generateToken(username, String.valueOf(Role.USER));
     }
 
     public String extractUsername(String token) {
